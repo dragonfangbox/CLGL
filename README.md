@@ -1,4 +1,4 @@
-# CLGA (Command Line Graphics Library)
+# CLGL (Command Line Graphics Library)
 
 > W.I.P
 
