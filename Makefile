@@ -4,4 +4,4 @@ TARGET=main.c
 TARGETNAME=main
 
 compile: $(TARGET)
-	$(CC) -Wall -o $(TARGETNAME)  $(TARGET) src/window.c -Isrc
+	$(CC) -g -Wall -o $(TARGETNAME)  $(TARGET) src/window.c src/LL.c -Isrc

@@ -1,9 +1,3 @@
-#ifdef __unix__
-	#include <termios.h>
-	#include <asm-generic/ioctls.h>
-	#include <sys/ioctl.h>
-#endif
-
 #include <stdio.h>
 #include <unistd.h>
 
@@ -14,32 +8,19 @@
 #define COLS 80
 
 int main() {
+	CLGL_init();
+
 	CLGL_clearWindow();
 
-	printf("ROWS: %d\n", CLGL_getTermRows());
-	printf("COLS: %d\n", CLGL_getTermCols());
-	
 	CLGL_setTermSize(ROWS, COLS);
 
-	printf("ROWS: %d\n", CLGL_getTermRows());
-	printf("COLS: %d\n", CLGL_getTermCols());
-	
-		CLGL_drawCAtPos(20,20, '|', GREEN);
-		sleep(1);
-		CLGL_drawCAtPos(20,20, '/', GREEN);
-		sleep(1);
-		CLGL_drawCAtPos(20,20, '-', GREEN);
-		sleep(1);
-		CLGL_drawCAtPos(20,20, '\\', GREEN);
-		sleep(1);
-		CLGL_drawCAtPos(20,20, '|', GREEN);
+	CLGL_createInputBox(5, 5, 5, 2);
+	CLGL_createInputBox(15, 5, 5, 2);
+	CLGL_createInputBox(25, 5, 5, 2);
 
 	getchar();
 
 	CLGL_restoreTermSet();
-
-	printf("ROWS: %d\n", CLGL_getTermRows());
-	printf("COLS: %d\n", CLGL_getTermCols());
 
 	return 0;
 }
