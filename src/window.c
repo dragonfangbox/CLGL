@@ -4,24 +4,20 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "window.h"
 #include "Types.h"
 #include "colors.h"
 #include "LL.h"
+#include "window.h"
 
 // add some way to gather input,
 // mabye some sort of input box???
 //
 // now time to add 
 
-static struct {
-	int rows;
-	int cols;
-} oldTermSettings;
-
 typedef struct {
 	uint id;
 	vec2 pos;
+	vec2 size;
 } inputBox;
 
 static uint globalID = 0;
@@ -62,58 +58,6 @@ void CLGL_clearWindow() {
 //	printf("\033[?25l");
 }
 
-void CLGL_setTermSize(int rows, int cols) {
-	oldTermSettings.rows = CLGL_getTermRows();
-	oldTermSettings.cols = CLGL_getTermCols();
-
-	struct winsize ws;
-	ws.ws_row = rows;
-	ws.ws_col = cols;
-	ws.ws_ypixel = 0;
-	ws.ws_xpixel = 0;
-
-	int res = ioctl(STDOUT_FILENO, TIOCSWINSZ, &ws);	
-	if(res == -1) {
-		printf("ioctl failed\n");
-	}
-}
-
-int CLGL_getTermRows() {
-	struct winsize ws;
-	int res = ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);	
-	if(res == -1) {
-		printf("ioctl failed\n");
-	}
-
-	return ws.ws_row;
-}
-
-int CLGL_getTermCols() {
-	struct winsize ws;
-	int res = ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);	
-	if(res == -1) {
-		printf("ioctl failed\n");
-	}
-
-	return ws.ws_col;
-}
-
-void CLGL_restoreTermSet() {
-	struct winsize ws;
-	ws.ws_row = oldTermSettings.rows;
-	ws.ws_col = oldTermSettings.cols;
-	ws.ws_ypixel = 0;
-	ws.ws_xpixel = 0;
-
-	int res = ioctl(STDOUT_FILENO, TIOCSWINSZ, &ws);	
-	if(res == -1) {
-		printf("ioctl failed\n");
-	}
-	printf("\033[?25h\033[?1049l");
-
-	destroyLL(&inputBoxes); 
-}
-
 void CLGL_drawCAtPos(int row, 
 					int col, 
 					char v,
@@ -140,6 +84,8 @@ void CLGL_createInputBox(int row, int col, int width, int height) {
 	box->id = globalID;
 	box->pos.y = row;
 	box->pos.x = col;
+	box->size.y = row;
+	box->size.x = col;
 	
 	if(globalID == 0) {
 		inputBoxes.head->value = box;
@@ -168,7 +114,9 @@ void CLGL_jumpToNext() {
 	while(currentNode != NULL) {
 		inputBox* currentBox = (inputBox*)currentNode->value;
 		if(currentIndex == cursorID) {
-			printf("\033[%d;%dH", currentBox->pos.y, currentBox->pos.x);
+			printf("\033[%d;%dH", currentBox->pos.y + currentBox->size.y / 2,
+								  currentBox->pos.x + currentBox->size.x / 2);
+
 			break;
 		}
 
@@ -190,11 +138,18 @@ void CLGL_jumpToPrev() {
 	while(currentNode != NULL) {
 		inputBox* currentBox = (inputBox*)currentNode->value;
 		if(currentIndex == cursorID) {
-			printf("\033[%d;%dH", currentBox->pos.y, currentBox->pos.x);
+
+			printf("\033[%d;%dH", currentBox->pos.y + currentBox->size.y / 2,
+								  currentBox->pos.x + currentBox->size.x / 2);
+
 			break;
 		}
 
 		currentNode = currentNode->next;
 		currentIndex++;
 	}
+}
+
+void CLGL_exit() {
+	destroyLL(&inputBoxes);
 }

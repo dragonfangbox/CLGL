@@ -6,11 +6,6 @@
 void CLGL_init();
 void CLGL_clearWindow();
 
-void CLGL_setTermSize(int rows, int cols);
-int CLGL_getTermRows();
-int CLGL_getTermCols();
-void CLGL_restoreTermSet();
-
 void CLGL_drawCAtPos(int row, 
 					int col, 
 					char v,
@@ -33,4 +28,7 @@ void CLGL_createBox(int row,
 
 void CLGL_jumpToNext();
 void CLGL_jumpToPrev();
+
+void CLGL_exit();
+
 #endif

@@ -108,6 +108,7 @@ void destroyLL(linkedList* linkedList) {
 	while(currentNode) {
 		previousNode = currentNode;
 		currentNode = currentNode->next;
+		free(previousNode->value);
 		free(previousNode);
 	}
 }
