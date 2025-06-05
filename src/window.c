@@ -50,12 +50,12 @@ static void drawRect(int row, int col, int width, int height) {
 
 void CLGL_init() {
 	initLL(&inputBoxes, NULL);
+	// sets cursor transparent and enables alt buffer
+	printf("\033[?25l\033[?1049h");
 }
 
 void CLGL_clearWindow() {
 	printf("\033[2J\033[H");
-	// sets cursor transparent and enables alt buffer
-//	printf("\033[?25l");
 }
 
 void CLGL_drawCAtPos(int row, 
