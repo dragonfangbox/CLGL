@@ -1,5 +1,7 @@
 # CLGL (Command Line Graphics Library)
 
+> Lightweight terminal graphics
+>
 > W.I.P
 
 ## TODO
