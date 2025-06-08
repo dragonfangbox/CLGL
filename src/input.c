@@ -58,6 +58,7 @@ void CLGL_getString(char* str, int len) {
 			break;
 		}
 
+		str[count] = c;
 		printf("%c", c);
 		count++;
 	}

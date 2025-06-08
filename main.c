@@ -16,12 +16,12 @@ int main() {
 
 	CLGL_createInputBox(5, 5, 5, 5);
 	CLGL_createInputBox(15, 5, 5, 5);
-	CLGL_createInputBox(25, 5, 5, 5);
+	CLGL_createInputBox(25, 15, 5, 5);
 	CLGL_jumpToPrev();
 
 	CLGL_setTermSize(ROWS, COLS);
 
-	char str[128];
+	char str[256];
 
 	int c;
 	while((c = CLGL_getKeyboardInput())) {
@@ -33,6 +33,7 @@ int main() {
 			CLGL_jumpToNext();
 		} else if(c == 'w') {
 			CLGL_getString(str, sizeof(str));
+			CLGL_drawSAtPos(1, 1, str, MAGENTA);	
 		}
 	}
 
