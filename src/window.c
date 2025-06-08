@@ -50,8 +50,8 @@ static void drawRect(int row, int col, int width, int height) {
 
 void CLGL_init() {
 	initLL(&inputBoxes, NULL);
-	// sets cursor transparent and enables alt buffer
-	printf("\033[?25l\033[?1049h");
+	// enables alt buffer
+	printf("\033[?1049h");
 }
 
 void CLGL_clearWindow() {
@@ -114,8 +114,8 @@ void CLGL_jumpToNext() {
 	while(currentNode != NULL) {
 		inputBox* currentBox = (inputBox*)currentNode->value;
 		if(currentIndex == cursorID) {
-			printf("\033[%d;%dH", currentBox->pos.y + currentBox->size.y / 2,
-								  currentBox->pos.x + currentBox->size.x / 2);
+			printf("\033[%d;%dH", currentBox->pos.y + currentBox->size.y % 2,
+								  currentBox->pos.x + 1);
 
 			break;
 		}
@@ -139,8 +139,8 @@ void CLGL_jumpToPrev() {
 		inputBox* currentBox = (inputBox*)currentNode->value;
 		if(currentIndex == cursorID) {
 
-			printf("\033[%d;%dH", currentBox->pos.y + currentBox->size.y / 2,
-								  currentBox->pos.x + currentBox->size.x / 2);
+			printf("\033[%d;%dH", currentBox->pos.y + currentBox->size.y % 2,
+								  currentBox->pos.x + 1);
 
 			break;
 		}

@@ -6,4 +6,6 @@ int CLGL_getTermRows();
 int CLGL_getTermCols();
 void CLGL_restoreTermSet();
 
+void CLGL_setRawMode();
+
 #endif

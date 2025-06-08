@@ -1,6 +1,7 @@
 #ifndef input
 #define input
 
-int CLGL_getString(char* str);
+int CLGL_getKeyboardInput();
+void CLGL_getString(char* str, int len);
 
 #endif

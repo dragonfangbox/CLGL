@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <asm-generic/ioctls.h>
 #include <sys/ioctl.h>
-#include <stdio.h>
+#include <termios.h>
 #include <unistd.h>
 
 #include "term.h"
@@ -10,6 +10,8 @@ static struct {
 	int rows;
 	int cols;
 } oldTermSettings;
+
+static struct termios ogTerm;
 
 void CLGL_setTermSize(int rows, int cols) {
 	oldTermSettings.rows = CLGL_getTermRows();
@@ -59,4 +61,29 @@ void CLGL_restoreTermSet() {
 		printf("ioctl failed\n");
 	}
 	printf("\033[?25h\033[?1049l");
+
+	if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &ogTerm) == -1) {
+		printf("setattr failed\n");
+	}
+}
+
+// turns terminal into "raw" mode.
+void CLGL_setRawMode() {
+	if(tcgetattr(STDIN_FILENO, &ogTerm) == -1) {
+		printf("gettattr failed\n");
+	}
+
+	struct termios new;
+	if(tcgetattr(STDIN_FILENO, &new) == -1) {
+		printf("gettattr failed\n");
+	}
+
+    new.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+	new.c_iflag &= ~(IXON | ICRNL | BRKINT | INPCK | ISTRIP);
+	new.c_oflag &= ~(OPOST);
+	new.c_cflag |= CS8;
+
+	if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &new) == -1) {
+		printf("setattr failed\n");
+	}
 }

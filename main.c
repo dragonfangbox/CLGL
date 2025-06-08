@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <termios.h>
 
+#include "src/keycodes.h"
 #include "src/colors.h"
 #include "src/input.h"
 #include "src/term.h"
@@ -12,21 +12,29 @@
 
 int main() {
 	CLGL_init();
+	CLGL_setRawMode();
 
-	CLGL_clearWindow();
+	CLGL_createInputBox(5, 5, 5, 5);
+	CLGL_createInputBox(15, 5, 5, 5);
+	CLGL_createInputBox(25, 5, 5, 5);
+	CLGL_jumpToPrev();
 
 	CLGL_setTermSize(ROWS, COLS);
 
-	CLGL_clearWindow();
-	CLGL_createInputBox(5, 5, 15, 3);
-//	CLGL_createInputBox(15, 5, 5, 2);
-//	CLGL_createInputBox(25, 5, 5, 2);
+	char str[128];
 
-	CLGL_jumpToPrev();
-
-	char str[50];
-	CLGL_getString(str);
-	printf("\n\n\n%s", str);
+	int c;
+	while((c = CLGL_getKeyboardInput())) {
+		if(c == 'q') {
+			break;
+		} else if(c == UP_ARROW) {
+			CLGL_jumpToPrev();
+		} else if(c == DOWN_ARROW) {
+			CLGL_jumpToNext();
+		} else if(c == 'w') {
+			CLGL_getString(str, sizeof(str));
+		}
+	}
 
 	CLGL_restoreTermSet();
 
